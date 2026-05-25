@@ -57,8 +57,12 @@ a {
 }
 
 .brand-logo {
-  width: 42px;
-  height: 42px;
+  display: block;
+  flex: 0 0 36px;
+  width: 36px;
+  max-width: 36px;
+  height: 36px;
+  max-height: 36px;
   object-fit: cover;
   border: 2px solid rgba(255, 213, 229, 0.72);
   border-radius: 50%;
