@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wangmu921 的个人博客</title>
+  <meta name="description" content="Wangmu921 的个人博客入口，记录学习、技术、生活与项目复盘。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#">
+      <span class="brand-mark">W</span>
+      <span>Wangmu921</span>
+    </a>
+    <nav class="nav-links" aria-label="主导航">
+      <a href="#posts">文章</a>
+      <a href="#topics">分类</a>
+      <a href="#about">关于</a>
+      <a href="https://github.com/Wangmu921" target="_blank" rel="noreferrer">GitHub</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Personal Blog</p>
+        <h1>把学到的东西，慢慢写成自己的地图。</h1>
+        <p class="hero-text">
+          这里会记录技术学习、项目复盘、生活观察和一些正在形成中的想法。
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#posts">查看文章</a>
+          <a class="button secondary" href="https://github.com/Wangmu921" target="_blank" rel="noreferrer">访问 GitHub</a>
+        </div>
+      </div>
+      <div class="hero-visual" aria-label="博客主题视觉">
+        <div class="desk-scene">
+          <span class="sun"></span>
+          <span class="window"></span>
+          <span class="notebook"></span>
+          <span class="coffee"></span>
+          <span class="pen"></span>
+        </div>
+      </div>
+    </section>
+
+    <section id="posts" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">Latest Notes</p>
+        <h2>最近文章</h2>
+      </div>
+      <div class="post-grid">
+        <article class="post-card">
+          <p class="post-meta">学习笔记 · 2026-05-25</p>
+          <h3><a href="posts/hello-blog.html">我的第一篇博客</a></h3>
+          <p>从这个 demo 开始，搭建一个属于自己的长期记录空间。</p>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">技术文章 · Draft</p>
+          <h3><a href="#">GitHub Pages 部署记录</a></h3>
+          <p>整理从创建仓库到上线页面的完整流程，方便以后复用。</p>
+        </article>
+        <article class="post-card">
+          <p class="post-meta">项目复盘 · Draft</p>
+          <h3><a href="#">一次课程项目的复盘</a></h3>
+          <p>记录需求分析、实现过程、遇到的问题和可以改进的地方。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="topics" class="section topic-section">
+      <div class="section-heading">
+        <p class="eyebrow">Topics</p>
+        <h2>分类入口</h2>
+      </div>
+      <div class="topic-list">
+        <a href="#">学习笔记</a>
+        <a href="#">技术文章</a>
+        <a href="#">生活记录</a>
+        <a href="#">项目复盘</a>
+      </div>
+    </section>
+
+    <section id="about" class="section about">
+      <div>
+        <p class="eyebrow">About</p>
+        <h2>关于我</h2>
+      </div>
+      <p>
+        你好，我是 Wangmu921。这个主页现在是一个简单的博客入口，之后可以继续扩展文章列表、
+        分类页面、归档页，或者升级成 Jekyll / Astro 这类更完整的博客系统。
+      </p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>© 2026 Wangmu921</span>
+    <a href="https://github.com/Wangmu921" target="_blank" rel="noreferrer">github.com/Wangmu921</a>
+  </footer>
+</body>
+</html>
