@@ -297,8 +297,9 @@ cite {
 .about-lines p {
   margin: 0;
   color: var(--pink);
-  font-size: clamp(0.92rem, 1vw, 1.02rem);
-  font-weight: 700;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
   line-height: 1.45;
 }
 
@@ -318,22 +319,28 @@ cite {
 .subpage {
   width: min(1120px, calc(100% - 40px));
   margin: 0 auto;
-  padding-top: 120px;
+  padding-top: 96px;
 }
 
 .diary-page {
   display: block;
   min-height: calc(100vh - 120px);
-  padding: 64px 0 96px;
+  padding: 28px 0 96px;
 }
 
 .diary-heading {
   text-align: left;
 }
 
+.diary-heading .eyebrow {
+  margin-bottom: 6px;
+  font-size: 0.72rem;
+}
+
 .diary-heading h1 {
   max-width: none;
-  font-size: clamp(3rem, 7vw, 5.6rem);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  line-height: 1;
 }
 
 .diary-links {
@@ -341,7 +348,7 @@ cite {
   flex-direction: column;
   align-items: flex-start;
   gap: 14px;
-  padding-top: 18px;
+  padding-top: 24px;
 }
 
 .diary-links a {
