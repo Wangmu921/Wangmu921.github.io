@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operating System - Dogwood</title>
+  <meta name="description" content="Dogwood's operating system notes.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">
+      <img class="brand-logo" src="images/logo.jpg" alt="Dogwood logo" width="36" height="36">
+      <span>Dogwood</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="study.html">Study Notes</a>
+      <a href="index.html#sections">Sections</a>
+      <a href="index.html#about">About</a>
+      <a href="https://github.com/Wangmu921" target="_blank" rel="noreferrer">GitHub</a>
+    </nav>
+  </header>
+
+  <main class="subpage">
+    <section class="note-reader-page">
+      <div class="page-heading">
+        <p class="eyebrow">Study Notes</p>
+        <h1>Operating System</h1>
+      </div>
+
+      <nav class="note-jump-links" aria-label="Operating system note list">
+        <a href="#os-note-1">Operating System 1</a>
+        <a href="#os-note-2">Operating System 2</a>
+      </nav>
+
+      <article id="os-note-1" class="note-document">
+        <h2>Operating System 1</h2>
+        <pre data-note-src="notes/操作系统/1.txt">Loading note...</pre>
+      </article>
+
+      <article id="os-note-2" class="note-document">
+        <h2>Operating System 2</h2>
+        <pre data-note-src="notes/操作系统/2.txt">Loading note...</pre>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>© 2026 Dogwood</span>
+    <a href="study.html">Back to Study Notes</a>
+  </footer>
+
+  <script>
+    document.querySelectorAll("[data-note-src]").forEach(async (block) => {
+      const source = block.getAttribute("data-note-src");
+      try {
+        const response = await fetch(encodeURI(source));
+        if (!response.ok) {
+          throw new Error("HTTP " + response.status);
+        }
+        block.textContent = await response.text();
+      } catch (error) {
+        block.textContent = "Unable to load this note. Please check: " + source;
+      }
+    });
+  </script>
+</body>
+</html>
