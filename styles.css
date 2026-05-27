@@ -346,10 +346,6 @@ cite {
   line-height: 1;
 }
 
-.compact-heading h1 {
-  font-size: clamp(1.65rem, 2.6vw, 2.25rem);
-}
-
 .diary-links {
   display: flex;
   flex-direction: column;
@@ -378,33 +374,8 @@ cite {
   padding: 28px 0 96px;
 }
 
-.note-categories {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  max-width: 820px;
-  padding-top: 24px;
-}
-
-.note-category-card {
-  display: flex;
-  align-items: flex-end;
-  min-height: 88px;
-  padding: 16px 18px;
-  color: var(--navy);
-  background: rgba(255, 213, 229, 0.92);
-  border: 1px solid rgba(255, 213, 229, 0.7);
-  border-radius: 8px;
-  box-shadow: 0 12px 34px rgba(7, 22, 47, 0.22);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: clamp(1rem, 2vw, 1.25rem);
-  font-weight: 700;
-  transition: transform 160ms ease, border-color 160ms ease;
-}
-
-.note-category-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.9);
+.notes-grid {
+  padding-top: 30px;
 }
 
 .note-jump-links {
@@ -456,11 +427,11 @@ cite {
 }
 
 .markdown-body h2 {
-  font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+  font-size: clamp(1.18rem, 1.8vw, 1.42rem);
 }
 
 .markdown-body h3 {
-  font-size: clamp(1.12rem, 1.8vw, 1.35rem);
+  font-size: clamp(1.02rem, 1.45vw, 1.18rem);
 }
 
 .markdown-body h4,
@@ -576,10 +547,6 @@ cite {
 
   .section-grid,
   .about {
-    grid-template-columns: 1fr;
-  }
-
-  .note-categories {
     grid-template-columns: 1fr;
   }
 
