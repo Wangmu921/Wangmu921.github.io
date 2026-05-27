@@ -23,7 +23,7 @@
 
   <main class="subpage">
     <section class="note-reader-page">
-      <div class="page-heading">
+      <div class="page-heading compact-heading">
         <p class="eyebrow">Study Notes</p>
         <h1>Operating System</h1>
       </div>
@@ -34,13 +34,11 @@
       </nav>
 
       <article id="os-note-1" class="note-document">
-        <h2>Operating System 1</h2>
-        <pre data-note-src="notes/操作系统/1.txt">Loading note...</pre>
+        <div class="markdown-body" data-note-src="notes/操作系统/1.txt">Loading note...</div>
       </article>
 
       <article id="os-note-2" class="note-document">
-        <h2>Operating System 2</h2>
-        <pre data-note-src="notes/操作系统/2.txt">Loading note...</pre>
+        <div class="markdown-body" data-note-src="notes/操作系统/2.txt">Loading note...</div>
       </article>
     </section>
   </main>
@@ -51,14 +49,141 @@
   </footer>
 
   <script>
+    const escapeHtml = (text) => text
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;");
+
+    const inlineMarkdown = (text) => escapeHtml(text)
+      .replace(/`([^`]+)`/g, "<code>$1</code>")
+      .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*([^*]+)\*/g, "<em>$1</em>");
+
+    const isTableDivider = (line) =>
+      /^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(line);
+
+    const splitTableRow = (line) => line
+      .trim()
+      .replace(/^\|/, "")
+      .replace(/\|$/, "")
+      .split("|")
+      .map((cell) => cell.trim());
+
+    const isBlockStart = (line, nextLine = "") =>
+      /^#{1,6}\s+/.test(line) ||
+      /^---+$/.test(line.trim()) ||
+      /^>\s?/.test(line) ||
+      /^[-*+]\s+/.test(line) ||
+      /^\d+\.\s+/.test(line) ||
+      line.startsWith("```") ||
+      (line.includes("|") && isTableDivider(nextLine));
+
+    function renderMarkdown(markdown) {
+      const lines = markdown.replace(/\r\n/g, "\n").split("\n");
+      const html = [];
+      let i = 0;
+
+      while (i < lines.length) {
+        const line = lines[i];
+        const trimmed = line.trim();
+        const nextLine = lines[i + 1] || "";
+
+        if (!trimmed) {
+          i++;
+          continue;
+        }
+
+        if (trimmed.startsWith("```")) {
+          const code = [];
+          i++;
+          while (i < lines.length && !lines[i].trim().startsWith("```")) {
+            code.push(lines[i]);
+            i++;
+          }
+          i++;
+          html.push(`<pre><code>${escapeHtml(code.join("\n"))}</code></pre>`);
+          continue;
+        }
+
+        const heading = trimmed.match(/^(#{1,6})\s+(.+)$/);
+        if (heading) {
+          const level = Math.min(heading[1].length + 1, 6);
+          html.push(`<h${level}>${inlineMarkdown(heading[2])}</h${level}>`);
+          i++;
+          continue;
+        }
+
+        if (/^---+$/.test(trimmed)) {
+          html.push("<hr>");
+          i++;
+          continue;
+        }
+
+        if (line.includes("|") && isTableDivider(nextLine)) {
+          const headers = splitTableRow(line);
+          i += 2;
+          const rows = [];
+          while (i < lines.length && lines[i].includes("|") && lines[i].trim()) {
+            rows.push(splitTableRow(lines[i]));
+            i++;
+          }
+          html.push("<div class=\"table-wrap\"><table><thead><tr>" +
+            headers.map((cell) => `<th>${inlineMarkdown(cell)}</th>`).join("") +
+            "</tr></thead><tbody>" +
+            rows.map((row) => "<tr>" + row.map((cell) => `<td>${inlineMarkdown(cell)}</td>`).join("") + "</tr>").join("") +
+            "</tbody></table></div>");
+          continue;
+        }
+
+        if (/^>\s?/.test(line)) {
+          const quotes = [];
+          while (i < lines.length && /^>\s?/.test(lines[i])) {
+            quotes.push(lines[i].replace(/^>\s?/, ""));
+            i++;
+          }
+          html.push(`<blockquote>${quotes.map(inlineMarkdown).join("<br>")}</blockquote>`);
+          continue;
+        }
+
+        if (/^[-*+]\s+/.test(line)) {
+          const items = [];
+          while (i < lines.length && /^[-*+]\s+/.test(lines[i])) {
+            const item = lines[i].replace(/^[-*+]\s+/, "").trim();
+            if (item) items.push(`<li>${inlineMarkdown(item)}</li>`);
+            i++;
+          }
+          if (items.length) html.push(`<ul>${items.join("")}</ul>`);
+          continue;
+        }
+
+        if (/^\d+\.\s+/.test(line)) {
+          const items = [];
+          while (i < lines.length && /^\d+\.\s+/.test(lines[i])) {
+            items.push(`<li>${inlineMarkdown(lines[i].replace(/^\d+\.\s+/, "").trim())}</li>`);
+            i++;
+          }
+          html.push(`<ol>${items.join("")}</ol>`);
+          continue;
+        }
+
+        const paragraph = [trimmed];
+        i++;
+        while (i < lines.length && lines[i].trim() && !isBlockStart(lines[i], lines[i + 1] || "")) {
+          paragraph.push(lines[i].trim());
+          i++;
+        }
+        html.push(`<p>${inlineMarkdown(paragraph.join(" "))}</p>`);
+      }
+
+      return html.join("\n");
+    }
+
     document.querySelectorAll("[data-note-src]").forEach(async (block) => {
       const source = block.getAttribute("data-note-src");
       try {
         const response = await fetch(encodeURI(source));
-        if (!response.ok) {
-          throw new Error("HTTP " + response.status);
-        }
-        block.textContent = await response.text();
+        if (!response.ok) throw new Error("HTTP " + response.status);
+        block.innerHTML = renderMarkdown(await response.text());
       } catch (error) {
         block.textContent = "Unable to load this note. Please check: " + source;
       }
