@@ -97,6 +97,9 @@
       .replace(/\$([^$\n]+?)\$/g, (_, formula) => renderMath(formula, false));
 
     const inlineMarkdown = (text) => escapeHtml(text)
+      .replace(/&amp;gt;/g, "&gt;")
+      .replace(/&amp;lt;/g, "&lt;")
+      .replace(/&amp;amp;/g, "&amp;")
       .replace(/&lt;br\s*\/?&gt;/gi, "<br>")
       .replace(/\\\|/g, "&#124;")
       .replace(/`([^`]+)`/g, "<code>$1</code>")
