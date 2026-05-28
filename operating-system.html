@@ -60,6 +60,7 @@
       .replaceAll(">", "&gt;");
 
     const inlineMarkdown = (text) => escapeHtml(text)
+      .replace(/&lt;br\s*\/?&gt;/gi, "<br>")
       .replace(/\\\|/g, "&#124;")
       .replace(/`([^`]+)`/g, "<code>$1</code>")
       .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
