@@ -70,12 +70,40 @@
       .replaceAll("<", "&lt;")
       .replaceAll(">", "&gt;");
 
+    const renderMath = (source, display = false) => {
+      let html = escapeHtml(source.trim())
+        .replace(/\\rightarrow/g, "→")
+        .replace(/\\leftarrow/g, "←")
+        .replace(/\\times/g, "×")
+        .replace(/\\leq/g, "≤")
+        .replace(/\\geq/g, "≥")
+        .replace(/\\neq/g, "≠")
+        .replace(/\\text\{([^{}]+)\}/g, "<span class=\"math-text\">$1</span>")
+        .replace(/_\{([^{}]+)\}/g, "<sub>$1</sub>")
+        .replace(/\^\{([^{}]+)\}/g, "<sup>$1</sup>")
+        .replace(/\\_/g, "_")
+        .replace(/\s*=\s*/g, " = ")
+        .replace(/\s*-\s*/g, " - ");
+
+      html = html.replace(/([A-Za-z])(?:<sub>|$)/g, (match) =>
+        match.startsWith("<") ? match : `<var>${match[0]}</var>${match.slice(1)}`
+      );
+
+      return `<span class="${display ? "math-display" : "math-inline"}">${html}</span>`;
+    };
+
+    const renderMathSegments = (text) => text
+      .replace(/\$\$([\s\S]+?)\$\$/g, (_, formula) => renderMath(formula, true))
+      .replace(/\$([^$\n]+?)\$/g, (_, formula) => renderMath(formula, false));
+
     const inlineMarkdown = (text) => escapeHtml(text)
       .replace(/&lt;br\s*\/?&gt;/gi, "<br>")
       .replace(/\\\|/g, "&#124;")
       .replace(/`([^`]+)`/g, "<code>$1</code>")
       .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
-      .replace(/\*([^*]+)\*/g, "<em>$1</em>");
+      .replace(/\*([^*]+)\*/g, "<em>$1</em>")
+      .replace(/\$\$([\s\S]+?)\$\$/g, (_, formula) => renderMath(formula, true))
+      .replace(/\$([^$\n]+?)\$/g, (_, formula) => renderMath(formula, false));
 
     const isTableDivider = (line) =>
       /^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(line);
@@ -142,6 +170,28 @@
         if (/^---+$/.test(trimmed)) {
           html.push("<hr>");
           i++;
+          continue;
+        }
+
+        if (trimmed.startsWith("$$")) {
+          const formula = [];
+          const first = trimmed.replace(/^\$\$/, "");
+          if (first && !first.endsWith("$$")) formula.push(first);
+          if (first.endsWith("$$")) {
+            html.push(renderMath(first.replace(/\$\$$/, ""), true));
+            i++;
+            continue;
+          }
+          i++;
+          while (i < lines.length && !lines[i].trim().endsWith("$$")) {
+            formula.push(lines[i]);
+            i++;
+          }
+          if (i < lines.length) {
+            formula.push(lines[i].trim().replace(/\$\$$/, ""));
+            i++;
+          }
+          html.push(renderMath(formula.join(" "), true));
           continue;
         }
 
