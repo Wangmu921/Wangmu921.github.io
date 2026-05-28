@@ -72,6 +72,9 @@
 
     const renderMath = (source, display = false) => {
       let html = escapeHtml(source.trim())
+        .replace(/&amp;gt;/g, "&gt;")
+        .replace(/&amp;lt;/g, "&lt;")
+        .replace(/&amp;amp;/g, "&amp;")
         .replace(/\\rightarrow/g, "→")
         .replace(/\\leftarrow/g, "←")
         .replace(/\\times/g, "×")
